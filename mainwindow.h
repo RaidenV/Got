@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QValidator>
 #include "solarcalc.h"
+#include "howto.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,10 +20,12 @@ public:
 
 private slots:
     void calculateSolarAzAlt();
+    void howTo();
 
 private:
     Ui::MainWindow *ui;
     SolarCalc* mSolarCalc;
+    HowTo* mHowTo;
 
     QDoubleValidator mLatValid;
     QDoubleValidator mLonValid;

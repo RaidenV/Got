@@ -14,9 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    solarcalc.cpp
+    solarcalc.cpp \
+    gotcalc.cpp \
+    howto.cpp
 
 HEADERS  += mainwindow.h \
-    solarcalc.h
+    solarcalc.h \
+    gotcalc.h \
+    howto.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    howto.ui

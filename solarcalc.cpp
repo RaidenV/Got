@@ -9,12 +9,31 @@ History		 29 Jun 16  AFB	Created
 
 #include "solarcalc.h"
 
+/*----------------------------------------------------------------------------
+Name         SolarCalc
+
+Purpose      Constructor
+
+History		 29 Jun 16  AFB	Created
+----------------------------------------------------------------------------*/
 SolarCalc::SolarCalc(QObject *parent) : QObject(parent)
 {
     mTimeWasSet = false;
     mDateWasSet = false;
 }
 
+/*----------------------------------------------------------------------------
+Name         SolarCalc
+
+Purpose      Constructor
+
+Input        rLatitude          The latitude of the unit;
+             rLongitude         The longitude of the unit;
+             time               The current time;
+             date               The current date;
+
+History		 29 Jun 16  AFB	Created
+----------------------------------------------------------------------------*/
 SolarCalc::SolarCalc(const double &rLatitude, const double &rLongitude, QTime time, QDate date):
     mLatitudeDeg(rLatitude)
   , mLongitudeDeg(rLongitude)
@@ -182,6 +201,13 @@ void SolarCalc::calculateDec()
     mSolarDeclinationRad = getRadians(mSolarDeclinationDeg);
 }
 
+/*----------------------------------------------------------------------------
+Name         calculateZen
+
+Purpose      Calculates the Solar Zenith
+
+History		 29 Jun 16  AFB	Created
+----------------------------------------------------------------------------*/
 void SolarCalc::calculateZen()
 {
     mZenithRad  = acos(sin(mLatitudeRad)
@@ -196,7 +222,7 @@ void SolarCalc::calculateZen()
 /*----------------------------------------------------------------------------
 Name         calculateAlt
 
-Purpose      Calculates the Solar Declination
+Purpose      Calculates the Solar Altitude
 
 History		 29 Jun 16  AFB	Created
 ----------------------------------------------------------------------------*/
@@ -208,7 +234,7 @@ void SolarCalc::calculateAlt()
 /*----------------------------------------------------------------------------
 Name         calculateAz
 
-Purpose      Calculates the Solar Declination
+Purpose      Calculates the Solar Azimuth
 
 History		 29 Jun 16  AFB	Created
 ----------------------------------------------------------------------------*/

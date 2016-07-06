@@ -1,3 +1,12 @@
+/*----------------------------------------------------------------------------
+Name         solarcalc.h
+
+Purpose      Given latitude, longitude, current time, and date calculate the
+             altitude and azimuth of the sun;
+
+History		 29 Jun 16  AFB	Created
+----------------------------------------------------------------------------*/
+
 #ifndef SOLARCALC_H
 #define SOLARCALC_H
 
@@ -10,13 +19,15 @@
 class SolarCalc : public QObject
 {
     Q_OBJECT
+
 public:
     explicit SolarCalc(QObject *parent = 0);
     explicit SolarCalc(const double& rLatitude
                        , const double& rLongitude
                        , QTime time
                        , QDate date);
-    ~SolarCalc(){}
+
+    ~SolarCalc(){} // Nothing on stack, nothing to destroy;
 
     void calculate(void); // Makes all necessary calculations;
 
@@ -44,8 +55,8 @@ private:
 
     QTime mTime; // Current local time entered by user;
     QDate mDate; // Current date;
-    bool mTimeWasSet;
-    bool mDateWasSet;
+    bool mTimeWasSet; // Variable for holding whether or not the time was set;
+    bool mDateWasSet; // Variable for holding whether or not the date was set;
 
     int mHour; // Current hour;
     int mMinute; // Current minute;
@@ -77,8 +88,8 @@ private:
     void calculateAz(void); // Calculates Solar Azimuth;
     void calculateAlt(void); // Calculates Solar Altitude (elevation);
 
-    double getRadians(double degrees);
-    double getDegrees(double radians);
+    double getRadians(double degrees); // Returns radians from degrees;
+    double getDegrees(double radians); // Returns degrees from radians;
 };
 
 #endif // SOLARCALC_H

@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->pushButtonCalculateSolarAzAlt, SIGNAL(clicked(bool))
             , this, SLOT(calculateSolarAzAlt()));
+    connect(ui->actionHowTo, SIGNAL(triggered()), this, SLOT(howTo()));
 
 }
 
@@ -46,4 +47,11 @@ void MainWindow::calculateSolarAzAlt()
 
     ui->lineEditSolarAltitude->setText(QString::number(mSolarCalc->getSolarAltitude()));
     ui->lineEditSolarAzimuth->setText(QString::number(mSolarCalc->getSolarAzimuth()));
+}
+
+void MainWindow::howTo()
+{
+    mHowTo = new HowTo(this);
+    mHowTo->setWindowModality(Qt::NonModal);
+    mHowTo->show();
 }
