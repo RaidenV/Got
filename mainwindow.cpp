@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("Gain Over Temperature Calculator");
 
     mSolarCalc = new SolarCalc(this);
+    mGotCalc = new GotCalc(this);
 
     ui->timeEdit->setTime(QTime::currentTime());
     ui->dateEdit->setDate(QDate::currentDate());
@@ -44,6 +45,9 @@ void MainWindow::calculateSolarAzAlt()
     mSolarCalc->setDate(rdate);
     mSolarCalc->setTime(rtime);
     mSolarCalc->calculate();
+
+    std::vector<double> frequencies;
+    mGotCalc->getAvailableFrequencies(frequencies);
 
     ui->lineEditSolarAltitude->setText(QString::number(mSolarCalc->getSolarAltitude()));
     ui->lineEditSolarAzimuth->setText(QString::number(mSolarCalc->getSolarAzimuth()));

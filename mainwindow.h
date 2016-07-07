@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QValidator>
+#include <QMessageBox>
+#include "gotcalc.h"
 #include "solarcalc.h"
 #include "howto.h"
 
@@ -24,11 +26,14 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    GotCalc* mGotCalc;
     SolarCalc* mSolarCalc;
     HowTo* mHowTo;
 
     QDoubleValidator mLatValid;
     QDoubleValidator mLonValid;
+
+    void checkGotFields(void);
 };
 
 #endif // MAINWINDOW_H

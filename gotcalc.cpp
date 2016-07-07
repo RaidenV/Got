@@ -1,8 +1,16 @@
 #include "gotcalc.h"
 
-GotCalc::GotCalc()
+GotCalc::GotCalc(QObject *parent) : QObject(parent)
 {
 
+}
+
+void GotCalc::getAvailableFrequencies(std::vector<double> &freq)
+{
+    for(size_t i = 0; i < constants::number_of_available_frequencies; i++)
+    {
+        freq.push_back(constants::available_frequencies[i]);
+    }
 }
 
 double GotCalc::linearInterpolation(double y1
@@ -34,5 +42,17 @@ double GotCalc::exponentialInterpolation(double y1
     yResult = A * exp(xPoint * k);
 
     return yResult;
+}
+
+double GotCalc::average(const std::vector<double>& values)
+{
+    double avg = 0;
+
+    for(size_t i = 0; i < values.size(); i++)
+    {
+        avg += values.at(i);
+    }
+
+    return (avg /= values.size());
 }
 

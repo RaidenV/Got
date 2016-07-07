@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <cmath>
+#include <QDebug>
 
 namespace constants
 {
@@ -13,6 +14,14 @@ namespace constants
 
     // Conversion factor from Solar Units to Watts per Meter Squared per Hertz;
     const double W_M2_Hz = 10e-23;
+
+    // Number of frequencies which are available for Solar Flux Data;
+    const int number_of_available_frequencies = 9;
+
+    // Frequencies for which Solar Flux Data might be provided;
+    const double available_frequencies[number_of_available_frequencies]
+        = {245, 410, 610, 1415, 2695, 2800, 4995, 8800, 15400};
+
 }
 
 class GotCalc : public QObject
@@ -20,9 +29,11 @@ class GotCalc : public QObject
     Q_OBJECT
 
 public:
-    GotCalc();
+    GotCalc(QObject *parent);
 
     ~GotCalc(){}
+
+    void getAvailableFrequencies(std::vector<double>& freq);
 
 private:
     double mSolarFluxHigh;
@@ -50,6 +61,8 @@ private:
                                     , double x1
                                     , double x2
                                     , double xPoint);
+
+    double average(const std::vector<double>& values);
 };
 
 #endif // GOTCALC_H
