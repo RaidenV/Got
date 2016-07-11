@@ -51,6 +51,31 @@ SolarCalc::SolarCalc(const double &rLatitude, const double &rLongitude, QTime ti
     mDateWasSet = true;
 }
 
+/*----------------------------------------------------------------------------
+Name         calculate
+
+Purpose      Calculates the azimuth and elevation of the sun;
+
+Notes        Because the calculation involes many minor calculations it's
+             summed up entirely in this function.  This function takes the sub-
+             function and calls them in an order which will guarantee a proper
+             calculation as the result of some of them have a direct impact
+             on the result of others (i.e. the Equation of Time is used in
+             calculating the True Solar Time and therefore must be calculated
+             first).
+
+             Before running this function, the following functions should be
+             called:
+             - setTime
+             - setDate
+             - setLongitude
+             - setLatitude
+
+             Alternatively, the constructor which has the applicable variables
+             as arguments can be called;
+
+History		 4 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
 void SolarCalc::calculate()
 {
      calculateEot(); // Calculates Equation of Time;

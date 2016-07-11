@@ -35,7 +35,18 @@ Notes        The following variables are required for this calculation.  These
 
              - mSolarFluxLow
              - mSolarFluxHigh
+             - mLowerFreqMHz
+             - mHigherFreqMHz
+             - mOperatingFrequency
+             - mBeamwidth
+             - All hot and cold measurements;
 
+             The calculation solves for G/T and places the answer into two
+             variables:
+
+             - mGotPure is the pure ratio of G/T;
+             - mGotdB is the pure ratio converted into decibel units according
+               to 10 * log10(mGotPure), or dBW;
 
 History		 10 Jul 16  AFB	Created
 ----------------------------------------------------------------------------*/

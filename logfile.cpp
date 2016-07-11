@@ -9,7 +9,6 @@ History		 11 Jun 16  AFB	Created
 #include "logfile.h"
 
 /*----------------------------------------------------------------------------
-
 Name		LogFile
 
 Purpose		Construct the log file object;
@@ -22,7 +21,6 @@ LogFile::LogFile(QObject *parent) : QObject(parent)
 }
 
 /*----------------------------------------------------------------------------
-
 Name		~LogFile
 
 Purpose		Log file destructor;
@@ -34,7 +32,6 @@ LogFile::~LogFile()
 }
 
 /*----------------------------------------------------------------------------
-
 Name		setNameAndOpen
 
 Purpose		Set the file name and open/test for successful open;
@@ -67,7 +64,6 @@ void LogFile::setNameAndOpen(const QString &filename)
 }
 
 /*----------------------------------------------------------------------------
-
 Name		append
 
 Purpose		Append a QString to the log file;
@@ -83,7 +79,6 @@ void LogFile::append(const QString& str)
 }
 
 /*----------------------------------------------------------------------------
-
 Name		append
 
 Purpose		Append a std::string to the log file;
