@@ -22,6 +22,8 @@ public:
 
 private slots:
     void calculateSolarAzAlt();
+    void calculateGot();
+    void setFrequencies();
     void howTo();
 
 private:
@@ -32,6 +34,9 @@ private:
 
     QDoubleValidator mLatValid;
     QDoubleValidator mLonValid;
+    QDoubleValidator mBeamwidthValid;
+    QDoubleValidator mMeasurementValid;
+    QDoubleValidator mFluxValid;
 
     void checkGotFields(void);
 };

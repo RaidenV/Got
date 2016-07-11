@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     solarcalc.cpp \
     gotcalc.cpp \
-    howto.cpp
+    howto.cpp \
+    logfile.cpp
 
 HEADERS  += mainwindow.h \
     solarcalc.h \
     gotcalc.h \
-    howto.h
+    howto.h \
+    logfile.h
 
 FORMS    += mainwindow.ui \
     howto.ui

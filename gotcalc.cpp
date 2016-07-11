@@ -1,18 +1,283 @@
+/*----------------------------------------------------------------------------
+Name         gotcalc.cpp
+
+Purpose      Calculate Gain Over Temperature;
+
+Notes        This calculation is based largely on work done by Richard Flagg,
+             call sign AH6NM;
+
+History		 7 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
 #include "gotcalc.h"
 
 GotCalc::GotCalc(QObject *parent) : QObject(parent)
 {
+    mSolarFluxPoint = 0;
+    mSolarFluxHigh = 0;
+    mSolarFluxLow = 0;
 
+    mOperatingFrequencyMHz = 0;
+    mHigherFreqMHz = 0;
+    mLowerFreqMHz = 0;
+
+    mHotAverage = 0;
+    mColdAverage = 0;
 }
 
-void GotCalc::getAvailableFrequencies(std::vector<double> &freq)
+/*----------------------------------------------------------------------------
+Name         calculate
+
+Purpose      Calculates the Gain Over Temperature
+
+Notes        The following variables are required for this calculation.  These
+             variables are set by the user through the setter functions made
+             available:
+
+             - mSolarFluxLow
+             - mSolarFluxHigh
+
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void GotCalc::calculate()
+{
+    mSolarFluxPoint = exponentialInterpolation(mSolarFluxLow, mSolarFluxHigh, mLowerFreqMHz, mHigherFreqMHz, mOperatingFrequencyMHz);
+    qDebug() << mSolarFluxPoint;
+    mSolarFluxPoint *= constants::W_M2_Hz;
+    mWavelengthm = constants::speed_of_light / mOperatingFrequencyMHz;
+
+    mHotAverage = average(mHotMeasurements);
+    mColdAverage = average(mColdMeasurements);
+
+    double sunNoiseRise = mHotAverage - mColdAverage;
+    sunNoiseRise = pow(10, (sunNoiseRise / 10));
+
+    mBeamCorrectionFactor = calculateBeamwidthCorrectionFactor();
+
+    double numerator = ((sunNoiseRise - 1) * 8 * M_PI * constants::boltzmann_constant * mBeamCorrectionFactor);
+    double denominator = (mSolarFluxPoint * pow(mWavelengthm, 2));
+
+    mGotPure = numerator / denominator;
+    mGotdB = 10 * log10(mGotPure);
+}
+
+/*----------------------------------------------------------------------------
+Name         getAvailableFrequencies
+
+Purpose      Places the frequencies available for solar flux measurments into
+             the argument std::vector;
+
+Input        rFreq           std::vector to be loaded with available freqs;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void GotCalc::getAvailableFrequencies(std::vector<double> &rFreq)
 {
     for(size_t i = 0; i < constants::number_of_available_frequencies; i++)
     {
-        freq.push_back(constants::available_frequencies[i]);
+        rFreq.push_back(constants::available_frequencies[i]);
     }
 }
 
+/*----------------------------------------------------------------------------
+Name         getInterpolatedSolarFlux
+
+Purpose      Returns the solar flux which was interpolated by the Gain Over
+             Temperature calculation;
+
+Returns      mSolarFluxPoint            The interpolated solar flux value;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+double GotCalc::getInterpolatedSolarFlux()
+{
+    return mSolarFluxPoint;
+}
+
+double GotCalc::getGotRatio()
+{
+    return mGotPure;
+}
+
+double GotCalc::getGotRatiodB()
+{
+    return mGotdB;
+}
+
+/*----------------------------------------------------------------------------
+Name         setSolarFluxHigh
+
+Purpose      Sets the solar flux of the higher frequency;
+
+Input        rFlux           Value of the solar flux of the higher frequency;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void GotCalc::setSolarFluxHigh(const double &rFlux)
+{
+    mSolarFluxHigh = rFlux;
+}
+
+/*----------------------------------------------------------------------------
+Name         setSolarFluxLow
+
+Purpose      Sets the solar flux of the lower frequency;
+
+Input        rFlux           Value of the solar flux of the lower frequency;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void GotCalc::setSolarFluxLow(const double &rFlux)
+{
+    mSolarFluxLow = rFlux;
+}
+
+/*----------------------------------------------------------------------------
+Name         setOperatingFrequency
+
+Purpose      Sets the operating frequency, or the frequency at which the Gain
+             over temperature will be calculated;
+
+Input        rFreq           Value of the operating frequency, in MHz;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void GotCalc::setOperatingFrequency(const double &rFreq)
+{
+    mOperatingFrequencyMHz = rFreq;
+}
+
+/*----------------------------------------------------------------------------
+Name         setHigherFrequency
+
+Purpose      Sets the higher frequency for which the solar flux will be used;
+
+Input        rFreq           Value of the higher frequency, in MHz;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void GotCalc::setHigherFrequency(const double &rFreq)
+{
+    mHigherFreqMHz = rFreq;
+}
+
+/*----------------------------------------------------------------------------
+Name         setLowerFrequency
+
+Purpose      Sets the lower frequency for which the solar flux will be used;
+
+Input        rFreq           Value of the lower frequency, in MHz;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void GotCalc::setLowerFrequency(const double &rFreq)
+{
+    mLowerFreqMHz = rFreq;
+}
+
+void GotCalc::setBeamwidth(const double &rBeamwidth)
+{
+    mBeamwidth = rBeamwidth;
+}
+
+/*----------------------------------------------------------------------------
+Name         addHotMeasurment
+
+Purpose      Adds another hot measurement to the mHotMeasurements vector;
+
+Input        rMeasurement           Value of the measurement;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void GotCalc::addHotMeasurement(const double &rMeasurement)
+{
+    mHotMeasurements.push_back(rMeasurement);
+}
+
+/*----------------------------------------------------------------------------
+Name         addColdMeasurement
+
+Purpose      Adds another cold measurement to the mColdMeasurements vector;
+
+Input        rMeasurement           Value of the measurement;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void GotCalc::addColdMeasurement(const double &rMeasurement)
+{
+    mColdMeasurements.push_back(rMeasurement);
+}
+
+/*----------------------------------------------------------------------------
+Name         clearHotMeasurments
+
+Purpose      Clears the mHotMeasurements vector;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void GotCalc::clearHotMeasurments()
+{
+    mHotMeasurements.clear();
+}
+
+/*----------------------------------------------------------------------------
+Name         clearColdMeasurments
+
+Purpose      Clears the mColdMeasurements vector;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void GotCalc::clearColdMeasurments()
+{
+    mColdMeasurements.clear();
+}
+
+double GotCalc::calculateBeamwidthCorrectionFactor()
+{
+    double radioSunDiameter = 0;
+    if (mBeamwidth >= 3)
+        return 1;
+
+    else
+    {
+        if (mOperatingFrequencyMHz > 400)
+        {
+            radioSunDiameter = 0.7;
+        }
+
+        if (mOperatingFrequencyMHz > 1420)
+        {
+            radioSunDiameter = 0.6;
+        }
+
+        if (mOperatingFrequencyMHz > 3000)
+        {
+            radioSunDiameter = 0.5;
+        }
+
+        return (1 + 0.38 * pow((radioSunDiameter / mBeamwidth), 2));
+    }
+}
+
+/*----------------------------------------------------------------------------
+Name         linearInterpolation
+
+Purpose      Performs a linear interpolation of the point xPoint given two
+             (x,y) coordinates on a Cartesian plane;
+
+Inputs        y1           y value of the first coordinate;
+              y2           y value of the second coordinate;
+              x1           x value of the first coordinate;
+              x2           x value of the second coordinate;
+              xPoint       The x value for which a y value will be interpolated
+
+Returns       yResult      The y value which has been linearly
+                           interpolated from the x value xPoint;
+
+Notes        Solves for a simple y = m(x) + b linear equation;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
 double GotCalc::linearInterpolation(double y1
                                     , double y2
                                     , double x1
@@ -28,6 +293,25 @@ double GotCalc::linearInterpolation(double y1
     return yResult;
 }
 
+/*----------------------------------------------------------------------------
+Name         exponentialInterpolation
+
+Purpose      Performs an exponential interpolation of the point xPoint given
+             two (x,y) coordinates on a Cartesian plane;
+
+Inputs        y1           y value of the first coordinate;
+              y2           y value of the second coordinate;
+              x1           x value of the first coordinate;
+              x2           x value of the second coordinate;
+              xPoint       The x value for which a y value will be interpolated
+
+Returns       yResult      The y value which has been exponentially
+                           interpolated from the x value xPoint;
+
+Notes        Solves for a simple y = A * e ^ (kt) exponential equation;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
 double GotCalc::exponentialInterpolation(double y1
                                          , double y2
                                          , double x1
@@ -44,6 +328,18 @@ double GotCalc::exponentialInterpolation(double y1
     return yResult;
 }
 
+/*----------------------------------------------------------------------------
+Name         average
+
+Purpose      Takes the average of a set of values;
+
+Inputs       values             std::vector of doubles for which an average
+                                will be calculated;
+
+Returns      avg                The average of the std::vector values;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
 double GotCalc::average(const std::vector<double>& values)
 {
     double avg = 0;

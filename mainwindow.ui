@@ -537,7 +537,7 @@
             <item>
              <widget class="QLabel" name="label_11">
               <property name="text">
-               <string>Measurement 1</string>
+               <string>Measurement 1 (dB)</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -547,7 +547,7 @@
             <item>
              <widget class="QLabel" name="label_12">
               <property name="text">
-               <string>Measurement 2</string>
+               <string>Measurement 2 (dB)</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -557,7 +557,7 @@
             <item>
              <widget class="QLabel" name="label_13">
               <property name="text">
-               <string>Measurement 3</string>
+               <string>Measurement 3 (dB)</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -589,6 +589,9 @@
               <property name="toolTip">
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the first Hot measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
+              <property name="text">
+               <string>-10</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
@@ -605,6 +608,9 @@
               <property name="toolTip">
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the second Hot measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
+              <property name="text">
+               <string>-10</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
@@ -620,6 +626,9 @@
               </property>
               <property name="toolTip">
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the third Hot measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>-10</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -651,6 +660,9 @@
               <property name="toolTip">
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the first Cold measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
+              <property name="text">
+               <string>-20</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
@@ -667,6 +679,9 @@
               <property name="toolTip">
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the second Cold measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
+              <property name="text">
+               <string>-20</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
@@ -682,6 +697,9 @@
               </property>
               <property name="toolTip">
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the third Cold measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>-20</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -766,7 +784,7 @@
               <rect>
                <x>10</x>
                <y>10</y>
-               <width>237</width>
+               <width>241</width>
                <height>52</height>
               </rect>
              </property>
@@ -780,6 +798,9 @@
               </item>
               <item>
                <widget class="QLineEdit" name="lineEditGotOutput">
+                <property name="cursor">
+                 <cursorShape>IBeamCursor</cursorShape>
+                </property>
                 <property name="toolTip">
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The calculated output of Gain Over Temperature given all the variables entered into the G Over T Data pane&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
