@@ -170,11 +170,29 @@ void SolarCalc::calculateTst()
     // Savings time;
     QDateTime dTime(mDate, mTime, Qt::LocalTime);
 
-    // If it is DST, subtract one hour from the mHour variable;
-    if (dTime.isDaylightTime())
+//    // If it is DST, subtract one hour from the mHour variable;
+//    if (dTime.isDaylightTime())
+//    {
+//        mHour -= 1;
+//    }
+    if (mDate.year() == 2016)
     {
-        mHour -= 1;
+        if (mDate.month() >= 4 || mDate.month() <= 10)
+       {
+           mHour -= 1;
+       }
+
+       else if (mDate.month() == 3 && mDate.day() >= 13)
+       {
+           mHour -= 1;
+       }
+
+       else if (mDate.month() == 11 && mDate.day () <= 6)
+       {
+           mHour -= 1;
+       }
     }
+
 
     // Note that in the final portion of this equation:
     // mLongitudeDeg / 15
