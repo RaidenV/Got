@@ -52,8 +52,11 @@ History		 10 Jul 16  AFB	Created
 ----------------------------------------------------------------------------*/
 void GotCalc::calculate()
 {
-    mSolarFluxPoint = exponentialInterpolation(mSolarFluxLow, mSolarFluxHigh, mLowerFreqMHz, mHigherFreqMHz, mOperatingFrequencyMHz);
-    qDebug() << mSolarFluxPoint;
+    mSolarFluxPoint = exponentialInterpolation(mSolarFluxLow
+                                               , mSolarFluxHigh
+                                               , mLowerFreqMHz
+                                               , mHigherFreqMHz
+                                               , mOperatingFrequencyMHz);
     mSolarFluxPoint *= constants::W_M2_Hz;
     mWavelengthm = constants::speed_of_light / mOperatingFrequencyMHz;
 
@@ -61,12 +64,16 @@ void GotCalc::calculate()
     mColdAverage = average(mColdMeasurements);
 
     double sunNoiseRise = mHotAverage - mColdAverage;
-    sunNoiseRise = pow(10, (sunNoiseRise / 10));
+    sunNoiseRise = pow(10.0, (sunNoiseRise / 10.0));
 
     mBeamCorrectionFactor = calculateBeamwidthCorrectionFactor();
 
-    double numerator = ((sunNoiseRise - 1) * 8 * M_PI * constants::boltzmann_constant * mBeamCorrectionFactor);
-    double denominator = (mSolarFluxPoint * pow(mWavelengthm, 2));
+    double numerator = ((sunNoiseRise - 1.0)
+                        * 8.0
+                        * M_PI
+                        * constants::boltzmann_constant
+                        * mBeamCorrectionFactor);
+    double denominator = (mSolarFluxPoint * pow(mWavelengthm, 2.0));
 
     mGotPure = numerator / denominator;
     mGotdB = 10 * log10(mGotPure);
@@ -266,7 +273,7 @@ double GotCalc::calculateBeamwidthCorrectionFactor()
             radioSunDiameter = 0.5;
         }
 
-        return (1 + 0.38 * pow((radioSunDiameter / mBeamwidth), 2));
+        return (1 + 0.38 * pow((radioSunDiameter / mBeamwidth), 2.0));
     }
 }
 

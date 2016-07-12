@@ -40,15 +40,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lineEditCold3->setValidator(&mMeasurementValid);
     ui->lineEditSolarFluxHigh->setValidator(&mFluxValid);
     ui->lineEditSolarFluxLow->setValidator(&mFluxValid);
-    ui->lineEditAntennaFrequency->setValidator(new QIntValidator(0, 50000, this));
+    ui->lineEditAntennaFrequency->setValidator(
+                new QIntValidator(0, 50000, this));
 
     connect(ui->pushButtonCalculateSolarAzAlt, SIGNAL(clicked(bool))
             , this, SLOT(calculateSolarAzAlt()));
     connect(ui->pushButtonCalculateGot, SIGNAL(clicked())
             , this, SLOT(calculateGot()));
+    connect(ui->pushButtonSave, SIGNAL(clicked())
+            , this, SLOT(save()));
     connect(ui->lineEditAntennaFrequency, SIGNAL(editingFinished())
             , this, SLOT(setFrequencies()));
     connect(ui->actionHowTo, SIGNAL(triggered()), this, SLOT(howTo()));
+    connect(ui->actionOptions, SIGNAL(triggered()), this, SLOT(options()));
+
+    loadSettings();
 
 }
 
@@ -67,6 +73,7 @@ void MainWindow::calculateSolarAzAlt()
 
     mSolarCalc->setTime(rTime);
     mSolarCalc->setDate(rDate);
+    mSolarCalc->setDaylightSavings(ui->checkBoxIsDaylightSavings->isChecked());
     mSolarCalc->calculate();
 
     std::vector<double> frequencies;
@@ -80,6 +87,10 @@ void MainWindow::calculateSolarAzAlt()
 
 void MainWindow::calculateGot()
 {
+    if (!checkGotFields())
+    {
+        return;
+    }
     setFrequencies();
 
     mGotCalc->clearHotMeasurments();
@@ -118,10 +129,10 @@ void MainWindow::setFrequencies()
             || targetFrequency > frequencyList.at(frequencyList.size() - 1))
     {
         QMessageBox::critical(this, "Critical"
-                              , ("Please enter a frequency between "
-                                 + QString::number(frequencyList.at(0))
-                                 + " and "
-                                 + QString::number(frequencyList.at(frequencyList.size() - 1))));
+              , ("Please enter a frequency between "
+               + QString::number(frequencyList.at(0))
+               + " and "
+               + QString::number(frequencyList.at(frequencyList.size() - 1))));
         return;
     }
 
@@ -145,6 +156,70 @@ void MainWindow::setFrequencies()
     mGotCalc->setOperatingFrequency(targetFrequency);
     mGotCalc->setHigherFrequency(higherFrequency);
     mGotCalc->setLowerFrequency(lowerFrequency);
+
+    mUpperFreq = higherFrequency;
+    mLowerFreq = lowerFrequency;
+}
+
+void MainWindow::save()
+{
+    QCoreApplication::setOrganizationName("CPI");
+    QCoreApplication::setApplicationName("Got");
+    QSettings settings;
+    QFileDialog fileDialog;
+    QString filename;
+    QDateTime dT = QDateTime::currentDateTime();
+
+    fileDialog.setDefaultSuffix(tr(".txt"));
+
+    if(!settings.contains("DefaultSaveLoc"))
+    {
+        filename = fileDialog.getSaveFileName(this
+           , tr("Save File")
+           , QStandardPaths::displayName(QStandardPaths::DocumentsLocation) + "/" + dT.toString("dd-MMM-yyyy.HH.mm.ss")
+           , "Text File (*.txt)");
+    }
+
+    else
+    {
+        filename = fileDialog.getSaveFileName(this
+           , tr("Save File")
+           , settings.value("DefaultSaveLoc").toString() + "/" + dT.toString("ddd-MMM-yyyy.HH.mm.ss")
+           , "Text File (*.txt)");
+    }
+
+    if(filename.isEmpty())
+    {
+        return;
+    }
+
+    mLogFile = new LogFile(this);
+    mLogFile->setNameAndOpen(filename);
+
+    if (!ui->lineEditSolarAltitude->text().isEmpty())
+    {
+        mLogFile->append(tr("Solar Data Was Calculated: "));
+        mLogFile->append("Date: " + ui->dateEdit->date().toString());
+        mLogFile->append("Time: " + ui->timeEdit->time().toString());
+        mLogFile->append("Latitude: " + ui->lineEditLatitude->text());
+        mLogFile->append("Longitude: " + ui->lineEditLongitude->text());
+        mLogFile->append("Solar Azimuth: " + ui->lineEditSolarAzimuth->text());
+        mLogFile->append("Solar Altitude: " + ui->lineEditSolarAltitude->text());
+    }
+
+    if (!ui->lineEditGotOutput->text().isEmpty())
+    {
+        mLogFile->append(tr("\rGain Over Temperature Data: "));
+        mLogFile->append("Operating Frequency (MHz): " + ui->lineEditAntennaFrequency->text());
+        mLogFile->append("Beamwidth (Degrees): " + ui->lineEditBeamWidth->text());
+        mLogFile->append("Solar Flux @ " + QString::number(mLowerFreq) + " (MHz): " + ui->lineEditSolarFluxLow->text());
+        mLogFile->append("Solar Flux @ " + QString::number(mUpperFreq) + " (MHz): " + ui->lineEditSolarFluxHigh->text());
+        mLogFile->append(tr("\t\t\tHot\t\tCold"));
+        mLogFile->append("Measurement 1:\t\t" + ui->lineEditHot1->text() + "\t\t" + ui->lineEditCold1->text());
+        mLogFile->append("Measurement 2:\t\t" + ui->lineEditHot2->text() + "\t\t" + ui->lineEditCold2->text());
+        mLogFile->append("Measurement 3:\t\t" + ui->lineEditHot3->text() + "\t\t" + ui->lineEditCold3->text());
+        mLogFile->append("Gain Over Temperature: " + ui->lineEditGotOutput->text());
+    }
 }
 
 void MainWindow::howTo()
@@ -152,4 +227,46 @@ void MainWindow::howTo()
     mHowTo = new HowTo(this);
     mHowTo->setWindowModality(Qt::NonModal);
     mHowTo->show();
+}
+
+void MainWindow::options()
+{
+    mOptions = new OptionMenu(this);
+    mOptions->setWindowModality(Qt::ApplicationModal);
+    mOptions->show();
+}
+
+bool MainWindow::checkGotFields()
+{
+    bool missingInfo = false;
+    missingInfo |= ui->lineEditAntennaFrequency->text().isEmpty();
+    missingInfo |= ui->lineEditBeamWidth->text().isEmpty();
+    missingInfo |= ui->lineEditSolarFluxLow->text().isEmpty();
+    missingInfo |= ui->lineEditSolarFluxHigh->text().isEmpty();
+    missingInfo |= ui->lineEditCold1->text().isEmpty();
+    missingInfo |= ui->lineEditCold2->text().isEmpty();
+    missingInfo |= ui->lineEditCold3->text().isEmpty();
+    missingInfo |= ui->lineEditHot1->text().isEmpty();
+    missingInfo |= ui->lineEditHot2->text().isEmpty();
+    missingInfo |= ui->lineEditHot3->text().isEmpty();
+
+    if (missingInfo)
+    {
+        QMessageBox::critical(this
+                              , "Critical"
+                 , "Fill out all fields before running a calculation.");
+
+        return false;
+    }
+
+    return true;
+}
+
+void MainWindow::loadSettings()
+{
+    QSettings settings;
+    if (settings.contains("DefaultSaveLoc"))
+    {
+        mDefaultSaveLoc = settings.value("DefaultSaveLoc").toString();
+    }
 }

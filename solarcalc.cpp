@@ -34,11 +34,15 @@ Input        rLatitude          The latitude of the unit;
 
 History		 29 Jun 16  AFB	Created
 ----------------------------------------------------------------------------*/
-SolarCalc::SolarCalc(const double &rLatitude, const double &rLongitude, QTime time, QDate date):
+SolarCalc::SolarCalc(const double &rLatitude
+                     , const double &rLongitude
+                     , QTime time, QDate date
+                     , bool daylightSavings):
     mLatitudeDeg(rLatitude)
   , mLongitudeDeg(rLongitude)
   , mTime(time)
   , mDate(date)
+  , mIsDaylightSavings(daylightSavings)
 {
     mLatitudeRad = getRadians(mLatitudeDeg);
     mLongitudeRad = getRadians(mLongitudeDeg);
@@ -68,6 +72,7 @@ Notes        Because the calculation involes many minor calculations it's
              called:
              - setTime
              - setDate
+             - setDaylightSavings
              - setLongitude
              - setLatitude
 
@@ -127,6 +132,38 @@ void SolarCalc::setDate(const QDate& rDate)
 }
 
 /*----------------------------------------------------------------------------
+Name         setDaylightSavings
+
+Purpose      Sets whether or not the location is currently in daylight savings
+             time.
+
+Input        rDst                   Boolean variable expressing:
+                                    true - is currently daylight savings time
+                                    false - is not currently dst;
+Notes        This function was created due to a toss up between two different
+             options:
+             - The user has to know their time from GMT/UTC;
+             - The user has to know their local time and whether or not it's
+               daylight savings time.
+
+             Personally, I think either way it requires the user to know
+             extra information, but when the user is in an area familiar to
+             them (such as operating this in California), I am much more likely
+             to know if its daylight savings time, and therefore will not have
+             to use a means of query to determine something, whereas I would
+             most definitely have to determine my time against GMT no matter
+             where I am.  That said, this entire thing could be removed if
+             the time in the GUI were just asked as UTC or GMT versus local
+             time.
+
+History		 11 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
+void SolarCalc::setDaylightSavings(const bool &rDst)
+{
+    mIsDaylightSavings = rDst;
+}
+
+/*----------------------------------------------------------------------------
 Name         calculateEot
 
 Purpose      Calculates an estimated Equation of Time based on the day of the
@@ -166,44 +203,23 @@ void SolarCalc::calculateTst()
         setTime(QTime::currentTime());
     }
 
-    // Construct a QDateTime object to use its ability to calculate Daylight
-    // Savings time;
-    QDateTime dTime(mDate, mTime, Qt::LocalTime);
-
-//    // If it is DST, subtract one hour from the mHour variable;
-//    if (dTime.isDaylightTime())
-//    {
-//        mHour -= 1;
-//    }
-    if (mDate.year() == 2016)
+    // Account for daylight savings time;
+    if (mIsDaylightSavings)
     {
-        if (mDate.month() >= 4 || mDate.month() <= 10)
-       {
-           mHour -= 1;
-       }
-
-       else if (mDate.month() == 3 && mDate.day() >= 13)
-       {
-           mHour -= 1;
-       }
-
-       else if (mDate.month() == 11 && mDate.day () <= 6)
-       {
-           mHour -= 1;
-       }
+        mHour -= 1;
     }
-
 
     // Note that in the final portion of this equation:
     // mLongitudeDeg / 15
     // I am using a more precise calculation of the offset from UTC than if
     // I were to have user enter in their UTC offset;
-    mTrueSolarTime = ((((mMinute / 30) + mHour) / 24.0) * 1440
-                      + mEquationOfTime + 4
-                      * mLongitudeDeg - 60
-                      * (mLongitudeDeg / 15));
+    mTrueSolarTime = ((((mMinute / 60.0) + mHour) / 24.0) * 1440.0
+                      + mEquationOfTime + 4.0
+                      * mLongitudeDeg - 60.0
+                      * (mLongitudeDeg / 15.0));
 
-    mTrueSolarTime = mTrueSolarTime - (1440 * (floor(mTrueSolarTime/1440)));
+    mTrueSolarTime = mTrueSolarTime
+            - (1440.0 * (floor(mTrueSolarTime/1440.0)));
 }
 
 /*----------------------------------------------------------------------------
@@ -217,12 +233,12 @@ void SolarCalc::calculateHa()
 {
     if ((mTrueSolarTime / 4.0) < 0)
     {
-        mHourAngleDeg = mTrueSolarTime / 4.0 + 180;
+        mHourAngleDeg = mTrueSolarTime / 4.0 + 180.0;
     }
 
     else if ((mTrueSolarTime / 4.0) >= 0)
     {
-        mHourAngleDeg = mTrueSolarTime / 4.0 - 180;
+        mHourAngleDeg = mTrueSolarTime / 4.0 - 180.0;
     }
 
     mHourAngleRad = getRadians(mHourAngleDeg);
@@ -271,7 +287,7 @@ History		 29 Jun 16  AFB	Created
 ----------------------------------------------------------------------------*/
 void SolarCalc::calculateAlt()
 {
-    mSolarAltitudeDeg = 90 - getDegrees(mZenithRad);
+    mSolarAltitudeDeg = 90.0 - getDegrees(mZenithRad);
 }
 
 /*----------------------------------------------------------------------------
@@ -291,20 +307,19 @@ void SolarCalc::calculateAz()
                                               - sin(mSolarDeclinationRad))
                                              /
                                               (cos(mLatitudeRad)
-                                              * sin(mZenithRad))))) + 180;
-
+                                              * sin(mZenithRad))))) + 180.0;
     }
 
     else
     {
-        mSolarAzimuthDeg = 540 - (getDegrees(acos((sin(mLatitudeRad)
+        mSolarAzimuthDeg = 540.0 - (getDegrees(acos((sin(mLatitudeRad)
                                                    * cos(mZenithRad)
                                                    - sin(mSolarDeclinationRad))
                                                   /
                                                   (cos(mLatitudeRad)
                                                    * sin(mZenithRad)))));
     }
-    mSolarAzimuthDeg = mSolarAzimuthDeg - (360 * floor(mSolarAzimuthDeg/360));
+    mSolarAzimuthDeg = mSolarAzimuthDeg - (360.0 * floor(mSolarAzimuthDeg/360.0));
 }
 
 /*----------------------------------------------------------------------------
@@ -411,7 +426,7 @@ History		 29 Jun 16  AFB	Created
 ----------------------------------------------------------------------------*/
 double SolarCalc::getRadians(double degrees)
 {
-    return (degrees * (M_PI / 180));
+    return (degrees * (M_PI / 180.0));
 }
 
 /*----------------------------------------------------------------------------
@@ -428,7 +443,7 @@ History		 29 Jun 16  AFB	Created
 ----------------------------------------------------------------------------*/
 double SolarCalc::getDegrees(double radians)
 {
-    return (radians * (180 / M_PI));
+    return (radians * (180.0 / M_PI));
 }
 
 

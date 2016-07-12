@@ -58,7 +58,7 @@ void LogFile::setNameAndOpen(const QString &filename)
 
     // Output date/time to the log file;
     QTextStream out(mFile);
-    out << "\n\r" << date;
+    out << date;
     date = dT.toString("hh:mm:ss.zzz");
     out << '\r' << date << '\r';
 }
@@ -76,6 +76,7 @@ void LogFile::append(const QString& str)
 {
     QTextStream out(mFile);
     out << str;
+    out << '\r';
 }
 
 /*----------------------------------------------------------------------------
@@ -94,5 +95,6 @@ void LogFile::append(const std::string& str)
     // to a QString;
     QString qStr(str.c_str());
     out << qStr;
+    out << '\r';
 }
 

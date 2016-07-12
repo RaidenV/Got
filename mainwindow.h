@@ -7,6 +7,8 @@
 #include "gotcalc.h"
 #include "solarcalc.h"
 #include "howto.h"
+#include "optionmenu.h"
+#include "logfile.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,13 +26,17 @@ private slots:
     void calculateSolarAzAlt();
     void calculateGot();
     void setFrequencies();
+    void save();
     void howTo();
+    void options();
 
 private:
     Ui::MainWindow *ui;
     GotCalc* mGotCalc;
     SolarCalc* mSolarCalc;
     HowTo* mHowTo;
+    OptionMenu* mOptions;
+    LogFile* mLogFile;
 
     QDoubleValidator mLatValid;
     QDoubleValidator mLonValid;
@@ -38,7 +44,13 @@ private:
     QDoubleValidator mMeasurementValid;
     QDoubleValidator mFluxValid;
 
-    void checkGotFields(void);
+    QString mDefaultSaveLoc;
+
+    double mUpperFreq;
+    double mLowerFreq;
+
+    bool checkGotFields(void);
+    void loadSettings(void);
 };
 
 #endif // MAINWINDOW_H

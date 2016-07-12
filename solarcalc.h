@@ -25,7 +25,8 @@ public:
     explicit SolarCalc(const double& rLatitude
                        , const double& rLongitude
                        , QTime time
-                       , QDate date);
+                       , QDate date
+                       , bool daylightSavings);
 
     ~SolarCalc(){} // Nothing on stack, nothing to destroy;
 
@@ -34,6 +35,7 @@ public:
 
     void setTime(const QTime& rTime); // Sets the current local time;
     void setDate(const QDate& rDate); // Sets the current date;
+    void setDaylightSavings(const bool& rDst); // Sets daylight savings;
     void setLatitude(const double& rLatitude); // Sets the unit's latitude;
     void setLongitude(const double& rLongitude); // Sets the unit's longitude;
 
@@ -61,6 +63,7 @@ private:
     int mHour; // Current hour;
     int mMinute; // Current minute;
     int mDayOfYear; // Day of year (1-365 (366 for leap year));
+    bool mIsDaylightSavings; // Whether or not it is currently DST in locale;
 
     double mSolarDeclinationDeg;
     double mSolarDeclinationRad;
