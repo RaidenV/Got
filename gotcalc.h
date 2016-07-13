@@ -8,10 +8,11 @@ History		 7 Jul 16  AFB	Created
 #ifndef GOTCALC_H
 #define GOTCALC_H
 
-#include <QObject>
-#include <cmath>
+#include <QObject> // ISA QObject
+#include <cmath> // USES many math functions;
 #include <QDebug>
 
+// Necessary constants;
 namespace constants
 {
     const double boltzmann_constant = 1.3806503e-23;

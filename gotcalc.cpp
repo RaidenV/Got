@@ -12,6 +12,7 @@ History		 7 Jul 16  AFB	Created
 
 GotCalc::GotCalc(QObject *parent) : QObject(parent)
 {
+    // Initialize all variables to zero;
     mSolarFluxPoint = 0;
     mSolarFluxHigh = 0;
     mSolarFluxLow = 0;
@@ -22,6 +23,12 @@ GotCalc::GotCalc(QObject *parent) : QObject(parent)
 
     mHotAverage = 0;
     mColdAverage = 0;
+
+    mBeamwidth = 0;
+    mBeamCorrectionFactor = 0;
+
+    mGotPure = 0;
+    mGotdB = 0;
 }
 
 /*----------------------------------------------------------------------------
@@ -52,30 +59,49 @@ History		 10 Jul 16  AFB	Created
 ----------------------------------------------------------------------------*/
 void GotCalc::calculate()
 {
+    // Calculate the solar flux at a specific point given two frequencies
+    // (the next frequency above the operating frequency and the frequency
+    // directly beneath the operating frequency) and two solar flux values
+    // (corresponding to the aforementioned frequencies);
     mSolarFluxPoint = exponentialInterpolation(mSolarFluxLow
                                                , mSolarFluxHigh
                                                , mLowerFreqMHz
                                                , mHigherFreqMHz
                                                , mOperatingFrequencyMHz);
+    // Conver the newly obtained Solar Flux value to Watts per Meters
+    // Squared per Hertz;
     mSolarFluxPoint *= constants::W_M2_Hz;
+
+    // Get the wavelength at the operating frequency, in meters;
     mWavelengthm = constants::speed_of_light / mOperatingFrequencyMHz;
 
+    // Get the average of the hot and cold measurements;
     mHotAverage = average(mHotMeasurements);
     mColdAverage = average(mColdMeasurements);
 
+    // Get the Sun Noise Rise;
     double sunNoiseRise = mHotAverage - mColdAverage;
+
+    // Convert from a logarithmic value to corresponding units;
     sunNoiseRise = pow(10.0, (sunNoiseRise / 10.0));
 
+    // Get the Beam Correction Factor;
     mBeamCorrectionFactor = calculateBeamwidthCorrectionFactor();
 
+    // Produce the numerator;
     double numerator = ((sunNoiseRise - 1.0)
                         * 8.0
                         * M_PI
                         * constants::boltzmann_constant
                         * mBeamCorrectionFactor);
+
+    // Produce the denominator;
     double denominator = (mSolarFluxPoint * pow(mWavelengthm, 2.0));
 
+    // Divide to get the Gain Over Temperature Value;
     mGotPure = numerator / denominator;
+
+    // Convert into a decibel value;
     mGotdB = 10 * log10(mGotPure);
 }
 
@@ -112,11 +138,29 @@ double GotCalc::getInterpolatedSolarFlux()
     return mSolarFluxPoint;
 }
 
+/*----------------------------------------------------------------------------
+Name         getGotRatio
+
+Purpose      Returns the pure Gain Over Temperature ratio;
+
+Returns      mGotPure            Pure Gain Over Temperature ratio;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
 double GotCalc::getGotRatio()
 {
     return mGotPure;
 }
 
+/*----------------------------------------------------------------------------
+Name         getGotRatiodB
+
+Purpose      Returns the Gain Over Temperature in decibels;
+
+Returns      mGotdB            Gain Over Temperature in decibels;
+
+History		 10 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
 double GotCalc::getGotRatiodB()
 {
     return mGotdB;
