@@ -1,6 +1,20 @@
+/*-----------------------------------------------------------------------------
+Name         optionmenu.cpp
+
+Purpose      Dialog with user manipulated settings;
+
+History		 11 Jul 16  AFB	Created
+-----------------------------------------------------------------------------*/
 #include "optionmenu.h"
 #include "ui_optionmenu.h"
 
+/*----------------------------------------------------------------------------
+Name		OptionMenu
+
+Purpose		Constructor;
+
+History		11 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
 OptionMenu::OptionMenu(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::OptionMenu)
@@ -24,6 +38,13 @@ OptionMenu::OptionMenu(QWidget *parent) :
 
 }
 
+/*----------------------------------------------------------------------------
+Name		OptionMenu
+
+Purpose		Destructor;
+
+History		11 Jul 16  AFB	Created
+----------------------------------------------------------------------------*/
 OptionMenu::~OptionMenu()
 {
     delete ui;
@@ -69,6 +90,13 @@ void OptionMenu::save()
     this->close();
 }
 
+/*-----------------------------------------------------------------------------
+Name         closeWindow
+
+Purpose      Closes the dialog;
+
+History		 11 Jul 16  AFB	Created
+-----------------------------------------------------------------------------*/
 void OptionMenu::closeWindow()
 {
     this->close();

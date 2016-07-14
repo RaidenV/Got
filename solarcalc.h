@@ -21,12 +21,12 @@ class SolarCalc : public QObject
     Q_OBJECT
 
 public:
-    explicit SolarCalc(QObject *parent = 0);
+    explicit SolarCalc(QObject *parent = 0); // Constructor;
     explicit SolarCalc(const double& rLatitude
                        , const double& rLongitude
                        , QTime time
                        , QDate date
-                       , bool daylightSavings);
+                       , bool daylightSavings); // Constructor;
 
     ~SolarCalc(){} // Nothing on stack, nothing to destroy;
 
@@ -65,21 +65,20 @@ private:
     int mDayOfYear; // Day of year (1-365 (366 for leap year));
     bool mIsDaylightSavings; // Whether or not it is currently DST in locale;
 
-    double mSolarDeclinationDeg;
-    double mSolarDeclinationRad;
+    double mSolarDeclinationDeg; // Solar Declination in Degrees;
+    double mSolarDeclinationRad; // Solar Declination in Radians;
 
-    double mSolarAzimuthDeg;
+    double mSolarAzimuthDeg; // Solar Azimuth in Degrees;
+    double mSolarAltitudeDeg; // Solar Altitude in Degrees;
 
-    double mSolarAltitudeDeg;
+    double mZenithDeg; // Solar Zenith in Degrees;
+    double mZenithRad; // Solar Zenith in Radians;
 
-    double mZenithDeg;
-    double mZenithRad;
+    double mEquationOfTime; // Equation of time;
+    double mTrueSolarTime; // True Solar Time;
 
-    double mEquationOfTime;
-    double mTrueSolarTime;
-
-    double mHourAngleDeg;
-    double mHourAngleRad;
+    double mHourAngleDeg; // Hour Angle in Degrees;
+    double mHourAngleRad; // Hour Angle in Radians;
 
     double mLocalStandardTimeMeridianDeg;
 

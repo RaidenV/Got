@@ -1,3 +1,10 @@
+/*-----------------------------------------------------------------------------
+Name         mainwindow.h
+
+Purpose      Handles the majority of user input;
+
+History		 11 Jun 16  AFB	Created
+-----------------------------------------------------------------------------*/
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -19,8 +26,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit MainWindow(QWidget *parent = 0); // Constructor;
+    ~MainWindow(); // Destructor;
 
 private slots:    
     void calculateSolarAzAlt(); // Calculates the Solar Azimuth and Altitude;
@@ -31,7 +38,7 @@ private slots:
     void options(); // Opens an Options Menu Window;
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *ui; // UI object;
     GotCalc* mGotCalc; // Used for Calculating Gain Over Temperature;
     SolarCalc* mSolarCalc; // Used for Calculating Solar Position;
     HowTo* mHowTo; // 'How To' Dialog;

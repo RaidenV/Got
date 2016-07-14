@@ -1,10 +1,10 @@
-/*-------------------------------------------------------------------
-Name         logfile.cpp
+/*----------------------------------------------------------------------------
+Name         logfile.h
 
-Purpose      Handles log file output;
+Purpose      Handles log file, low level, output;
 
 History		 11 Jun 16  AFB	Created
------------------------------------------------------------------*/
+----------------------------------------------------------------------------*/
 
 #include "logfile.h"
 
@@ -71,6 +71,7 @@ Purpose		Append a QString to the log file;
 Inputs      str        QString of the data to be output to the file;
 
 History		11 Jun 16  AFB	Created
+            12 Jul 16  AFB  Added automatic appending of carriage return;
 ----------------------------------------------------------------------------*/
 void LogFile::append(const QString& str)
 {
@@ -87,6 +88,7 @@ Purpose		Append a std::string to the log file;
 Inputs      str        std::string of the data to be output to the file;
 
 History		11 Jun 16  AFB	Created
+            12 Jul 16  AFB  Added automatic appending of carriage return;
 ----------------------------------------------------------------------------*/
 void LogFile::append(const std::string& str)
 {

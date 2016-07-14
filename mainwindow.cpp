@@ -1,10 +1,10 @@
-/*----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 Name         mainwindow.cpp
 
-Purpose      Heart of the program, handles all user interaction;
+Purpose      Handles the majority of user input;
 
-History		 29 Jun 16  AFB	Created
-----------------------------------------------------------------------------*/
+History		 11 Jun 16  AFB	Created
+-----------------------------------------------------------------------------*/
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -439,7 +439,7 @@ History		 11 Jul 16  AFB	Created
 bool MainWindow::checkGotFields()
 {
     bool missingInfo = false;
-    // Or the temporary bool variable with the isEmpty() function of each line-
+    // OR the temporary bool variable with the isEmpty() function of each line-
     // edit.  Due to each line edit having an input mask/validator, it is
     // guaranteed that there will either be valid information entered, or none
     // at all; we are gaurding against the latter;

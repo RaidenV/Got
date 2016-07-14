@@ -18,8 +18,35 @@ History		 29 Jun 16  AFB	Created
 ----------------------------------------------------------------------------*/
 SolarCalc::SolarCalc(QObject *parent) : QObject(parent)
 {
+    // Initialize all variables;
+    mLatitudeDeg = 0;
+    mLatitudeRad = 0;
+
+    mLongitudeDeg = 0;
+    mLongitudeRad = 0;
+
     mTimeWasSet = false;
     mDateWasSet = false;
+
+    mHour = 0;
+    mMinute = 0;
+    mDayOfYear = 0;
+    mIsDaylightSavings = false;
+
+    mSolarDeclinationDeg = 0;
+    mSolarDeclinationRad = 0;
+
+    mSolarAzimuthDeg = 0;
+    mSolarAltitudeDeg = 0;
+
+    mZenithDeg = 0;
+    mZenithRad = 0;
+
+    mEquationOfTime = 0;
+    mTrueSolarTime = 0;
+
+    mHourAngleDeg = 0;
+    mHourAngleRad = 0;
 }
 
 /*----------------------------------------------------------------------------
@@ -53,6 +80,24 @@ SolarCalc::SolarCalc(const double &rLatitude
 
     mTimeWasSet = true;
     mDateWasSet = true;
+
+    // Initialize all left over variables;
+    mIsDaylightSavings = false;
+
+    mSolarDeclinationDeg = 0;
+    mSolarDeclinationRad = 0;
+
+    mSolarAzimuthDeg = 0;
+    mSolarAltitudeDeg = 0;
+
+    mZenithDeg = 0;
+    mZenithRad = 0;
+
+    mEquationOfTime = 0;
+    mTrueSolarTime = 0;
+
+    mHourAngleDeg = 0;
+    mHourAngleRad = 0;
 }
 
 /*----------------------------------------------------------------------------
@@ -149,8 +194,8 @@ Notes        This function was created due to a toss up between two different
              Personally, I think either way it requires the user to know
              extra information, but when the user is in an area familiar to
              them (such as operating this in California), I am much more likely
-             to know if its daylight savings time, and therefore will not have
-             to use a means of query to determine something, whereas I would
+             to know if its daylight savings time and therefore will not have
+             to use a means of query to determine something whereas I would
              most definitely have to determine my time against GMT no matter
              where I am.  That said, this entire thing could be removed if
              the time in the GUI were just asked as UTC or GMT versus local

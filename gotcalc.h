@@ -37,30 +37,44 @@ class GotCalc : public QObject
     Q_OBJECT
 
 public:
-    explicit GotCalc(QObject *parent);
+    explicit GotCalc(QObject *parent); // Constructor;
 
-    ~GotCalc(){}
+    ~GotCalc(){} // Destructor;
 
-    void calculate();
+    void calculate(); // Calculates the G Over T value;
 
+    // Returns frequencies for which Solar Flux can be gathered;
     void getAvailableFrequencies(std::vector<double>& rFreq);
+    // Returns the interpolated Solar Flux value;
     double getInterpolatedSolarFlux(void);
+    // Returns Gain Over Temperature as a pure ratio;
     double getGotRatio(void);
+    // Returns Gain Over Temperature in dB;
     double getGotRatiodB(void);
 
+    // Sets the Solar Flux of the higher frequency;
     void setSolarFluxHigh(const double& rFlux);
+    // Sets the Solar Flux of the lower frequency;
     void setSolarFluxLow(const double& rFlux);
 
+    // Sets the frequency at which the antenna is operating;
     void setOperatingFrequency(const double& rFreq);
+    // Sets the next frequency higher than operating;
     void setHigherFrequency(const double& rFreq);
+    // Sets the next frequency lower than operating;
     void setLowerFrequency(const double& rFreq);
 
+    // Sets the beamwidth of the antenna;
     void setBeamwidth(const double& rBeamwidth);
 
+    // Adds a hot measurement to the mHotMeasurements vector;
     void addHotMeasurement(const double& rMeasurement);
+    // Adds a cold measurement to the mColdMeasurements vector;
     void addColdMeasurement(const double& rMeasurement);
 
+    // Clears the mHotMeasurements vector;
     void clearHotMeasurments(void);
+    // Clears the mColdMeasurements vector;
     void clearColdMeasurments(void);
 
 private:
@@ -94,6 +108,7 @@ private:
     // Gain Over Temperature in dB, the value which will be returned;
     double mGotdB;
 
+    // Calculates the beamwidth correction factor;
     double calculateBeamwidthCorrectionFactor();
 
     // Allows for linear interpolation of a solar flux value given two
