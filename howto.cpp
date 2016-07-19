@@ -20,6 +20,8 @@ HowTo::HowTo(QWidget *parent) :
     ui(new Ui::HowTo)
 {
     ui->setupUi(this);
+    this->setWindowTitle(tr("How To"));
+
     connect(ui->pushButtonClose, SIGNAL(clicked()), this, SLOT(closeWindow()));
 }
 

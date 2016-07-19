@@ -15,6 +15,7 @@ History		 11 Jun 16  AFB	Created
 #include "solarcalc.h" // HASA SolarCalc member for calculating Solar position;
 #include "howto.h" // HASA HowTo to display the 'How To' Dialog;
 #include "optionmenu.h" // HASA OptionMenu for providing user options;
+#include "about.h" // HASA About page;
 #include "logfile.h" // HASA LogFile for logging calculations;
 
 namespace Ui {
@@ -36,6 +37,7 @@ private slots:
     void save(); // Saves Log Files;
     void howTo(); // Opens a How To window;
     void options(); // Opens an Options Menu Window;
+    void about();
 
 private:
     Ui::MainWindow *ui; // UI object;
@@ -43,6 +45,7 @@ private:
     SolarCalc* mSolarCalc; // Used for Calculating Solar Position;
     HowTo* mHowTo; // 'How To' Dialog;
     OptionMenu* mOptions; // Options Menu Dialog;
+    About* mAbout; // About page Dialog;
     LogFile* mLogFile; // Used for Logging;
 
     QDoubleValidator mLatValid; // Validates the Latitude input;

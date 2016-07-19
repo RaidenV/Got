@@ -20,6 +20,7 @@ OptionMenu::OptionMenu(QWidget *parent) :
     ui(new Ui::OptionMenu)
 {
     ui->setupUi(this);
+    this->setWindowTitle(tr("Options"));
 
     mDefaultSaveLoc.clear();
 

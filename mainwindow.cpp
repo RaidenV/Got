@@ -77,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
             , this, SLOT(setFrequencies()), Qt::UniqueConnection);
     connect(ui->actionHowTo, SIGNAL(triggered()), this, SLOT(howTo()));
     connect(ui->actionOptions, SIGNAL(triggered()), this, SLOT(options()));
+    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
 
     // Load the settings, in this case the default save directory;
     loadSettings();
@@ -423,6 +424,13 @@ void MainWindow::options()
     mOptions = new OptionMenu(this);
     mOptions->setWindowModality(Qt::ApplicationModal);
     mOptions->show();
+}
+
+void MainWindow::about()
+{
+    mAbout = new About(this);
+    mAbout->setWindowModality(Qt::NonModal);
+    mAbout->show();
 }
 
 /*----------------------------------------------------------------------------
