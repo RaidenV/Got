@@ -21,7 +21,7 @@ namespace constants
     const double speed_of_light = 299.792458;
 
     // Conversion factor from Solar Units to Watts per Meter Squared per Hertz;
-    const double W_M2_Hz = 10e-22;
+    const double W_M2_Hz = 10e-23;
 
     // Number of frequencies which are available for Solar Flux Data;
     const int number_of_available_frequencies = 9;

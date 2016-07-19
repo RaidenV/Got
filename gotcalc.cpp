@@ -63,7 +63,7 @@ void GotCalc::calculate()
     // (the next frequency above the operating frequency and the frequency
     // directly beneath the operating frequency) and two solar flux values
     // (corresponding to the aforementioned frequencies);
-    mSolarFluxPoint = exponentialInterpolation(mSolarFluxLow
+    mSolarFluxPoint = linearInterpolation(mSolarFluxLow
                                                , mSolarFluxHigh
                                                , mLowerFreqMHz
                                                , mHigherFreqMHz
@@ -80,13 +80,12 @@ void GotCalc::calculate()
     mColdAverage = average(mColdMeasurements);
 
     // Get the Sun Noise Rise;
-    double sunNoiseRise = mHotAverage - mColdAverage;
-
-    // Convert from a logarithmic value to corresponding units;
-    sunNoiseRise = pow(10.0, (sunNoiseRise / 10.0));
+    double sunNoiseRise = pow(10.0, ((mHotAverage - mColdAverage)/10.0));
 
     // Get the Beam Correction Factor;
     mBeamCorrectionFactor = calculateBeamwidthCorrectionFactor();
+
+    double wavelengthSquared = mWavelengthm * mWavelengthm;
 
     // Produce the numerator;
     double numerator = ((sunNoiseRise - 1.0)

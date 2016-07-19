@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>820</width>
-    <height>489</height>
+    <height>490</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -343,7 +343,7 @@
      <rect>
       <x>410</x>
       <y>10</y>
-      <width>403</width>
+      <width>406</width>
       <height>431</height>
      </rect>
     </property>
@@ -395,7 +395,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The mean operating frequency of the Antenna in question.&lt;/p&gt;&lt;p&gt;Example:&lt;/p&gt;&lt;p&gt;The antenna operates from 1440 MHz to 2400 MHz. The mean operating frequency would be &lt;/p&gt;&lt;p&gt;(1440 + 2400) / 2 = 1920 MHz&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>2185</string>
+               <string>2300</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -474,7 +474,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The Solar Flux at the given frequency&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>51.5</string>
+               <string>79</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -510,7 +510,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The Solar Flux at the given frequency&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>96.0</string>
+               <string>99</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -597,7 +597,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the first Hot measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>-10</string>
+               <string>-47.2</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -616,7 +616,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the second Hot measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>-10</string>
+               <string>-47.2</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -635,7 +635,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the third Hot measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>-10</string>
+               <string>-47.2</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -668,7 +668,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the first Cold measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>-20</string>
+               <string>-56.1</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -687,7 +687,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the second Cold measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>-20</string>
+               <string>-56.1</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -706,7 +706,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the third Cold measurement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>-20</string>
+               <string>-56.0</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -764,19 +764,6 @@
         <item row="3" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_17">
           <item>
-           <spacer name="horizontalSpacer_8">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
            <widget class="QFrame" name="frame_3">
             <property name="minimumSize">
              <size>
@@ -798,7 +785,7 @@
               <rect>
                <x>10</x>
                <y>10</y>
-               <width>241</width>
+               <width>331</width>
                <height>52</height>
               </rect>
              </property>
@@ -806,7 +793,10 @@
               <item>
                <widget class="QLabel" name="label_16">
                 <property name="text">
-                 <string>Calculated Gain Over Temperature</string>
+                 <string>Calculated Gain Over Temperature (dB/K)</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
                 </property>
                </widget>
               </item>
@@ -829,19 +819,6 @@
              </layout>
             </widget>
            </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_9">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </item>
