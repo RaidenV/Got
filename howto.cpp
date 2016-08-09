@@ -21,6 +21,8 @@ HowTo::HowTo(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle(tr("How To"));
+    QIcon windowIcon(":/Icons/GotAboutIcon.png");
+    this->setWindowIcon(windowIcon);
 
     connect(ui->pushButtonClose, SIGNAL(clicked()), this, SLOT(closeWindow()));
 }

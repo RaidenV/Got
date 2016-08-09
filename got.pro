@@ -33,3 +33,6 @@ FORMS    += mainwindow.ui \
     howto.ui \
     optionmenu.ui \
     about.ui
+
+RESOURCES += \
+    gotresources.qrc

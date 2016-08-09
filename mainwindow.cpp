@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle("Gain Over Temperature Calculator");
+    QIcon windowIcon(":/Icons/GotIcon.png");
+    setWindowIcon(windowIcon);
 
     // Initialize pointer variables;
     mSolarCalc = new SolarCalc(this);
@@ -278,7 +280,7 @@ History		 11 Jul 16  AFB	Created
 void MainWindow::save()
 {
     // Access the global settings;
-    QCoreApplication::setOrganizationName("CPI");
+    QCoreApplication::setOrganizationName("RV");
     QCoreApplication::setApplicationName("Got");
     QSettings settings;
 

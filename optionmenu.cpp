@@ -77,7 +77,7 @@ History		8 Jun 16  AFB	Created
 ----------------------------------------------------------------------------*/
 void OptionMenu::save()
 {
-    QCoreApplication::setOrganizationName("CPI");
+    QCoreApplication::setOrganizationName("RV");
     QCoreApplication::setApplicationName("Got");
     QSettings settings;
 

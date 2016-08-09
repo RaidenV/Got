@@ -858,16 +858,28 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionHowTo">
+   <property name="icon">
+    <iconset resource="gotresources.qrc">
+     <normaloff>:/Icons/GotAboutIcon.png</normaloff>:/Icons/GotAboutIcon.png</iconset>
+   </property>
    <property name="text">
     <string>How To</string>
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="gotresources.qrc">
+     <normaloff>:/Icons/GotAboutIcon.png</normaloff>:/Icons/GotAboutIcon.png</iconset>
+   </property>
    <property name="text">
     <string>About</string>
    </property>
   </action>
   <action name="actionOptions">
+   <property name="icon">
+    <iconset resource="gotresources.qrc">
+     <normaloff>:/Icons/GotOptions.png</normaloff>:/Icons/GotOptions.png</iconset>
+   </property>
    <property name="text">
     <string>Options</string>
    </property>
@@ -895,6 +907,8 @@
   <tabstop>pushButtonCalculateGot</tabstop>
   <tabstop>lineEditGotOutput</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="gotresources.qrc"/>
+ </resources>
  <connections/>
 </ui>

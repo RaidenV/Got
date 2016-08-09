@@ -56,6 +56,8 @@ Notes        The following variables are required for this calculation.  These
                to 10 * log10(mGotPure), or dBW;
 
 History		 10 Jul 16  AFB	Created
+             18 Jul 16  AFB Update equation, converting the Y value from dB to
+                            a power ratio;
 ----------------------------------------------------------------------------*/
 void GotCalc::calculate()
 {
